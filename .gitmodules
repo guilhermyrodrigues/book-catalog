@@ -1,0 +1,3 @@
+[submodule "book-frontend/book-frontend"]
+	path = book-frontend/book-frontend
+	url = https://github.com/guilhermyrodrigues/spa-books.git
