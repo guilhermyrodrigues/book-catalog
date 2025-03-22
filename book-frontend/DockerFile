@@ -1,0 +1,26 @@
+# Usa Node.js para construir o projeto Angular
+FROM node:18 AS build
+WORKDIR /app
+
+# Copia o package.json e package-lock.json para a pasta /app no contêiner
+COPY book-frontend/package*.json ./ 
+
+# Instala as dependências
+RUN npm install
+
+# Copia o restante do código do projeto Angular
+COPY book-frontend/ . 
+
+# Executa o build do projeto Angular
+RUN npm run build --prod
+
+# Usa Nginx para servir os arquivos estáticos
+FROM nginx:alpine
+
+# Copia os arquivos da aplicação Angular para o diretório do Nginx
+COPY --from=build /app/dist/book-frontend/browser /usr/share/nginx/html
+
+# Expondo a porta padrão do Nginx
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
